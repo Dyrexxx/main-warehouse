@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ДОДО ПИЦЦА</title>
+    <link rel="stylesheet" type="text/css" href="/styles.css">
+</head>
+<body>
+<div class="content">
+    <form method="get" th:action="@{/warehouses/{id}(id=${building.id})}"
+          th:each="building, j : ${buildingList}">
+
+        <h1 th:text="${building.getName()}"></h1>
+        <div th:each="ingredient : ${building.getIngredientList()}">
+            <p th:text="${ingredient.title} + ' - ' + ${ingredient.getStatus()}"></p>
+        </div>
+        <input type="submit" value="Оформить заявку">
+    </form>
+</div>
+<br>
+    <form method="post" th:action="@{/warehouses/delivery}">
+        <input type="submit" value="Отправить в рестораны">
+    </form>
+</body>
+</html>
