@@ -3,7 +3,6 @@ package ru.pizza.main_warehouse.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import ru.pizza.main_warehouse.models.Building;
 import ru.pizza.main_warehouse.models.Ingredient;
@@ -13,7 +12,6 @@ import ru.pizza.main_warehouse.utils.DimaUtils;
 import java.util.List;
 
 @Service
-@Transactional(readOnly = true)
 public class MainWarehouseService {
 
     private final RestTemplate restTemplate;
@@ -27,7 +25,6 @@ public class MainWarehouseService {
 
     public List<Building> getBuildingsList() {
         List<Building> buildings = getRestaurantsWarehouseList();
-        System.out.println(buildings);
         addStatus(buildings);
         return buildings;
     }
