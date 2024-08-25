@@ -69,11 +69,12 @@ public class MainWarehouseController {
     }
 
     @PostMapping("/order/{id}/add-delivery")
-    public String processingAddDelivery(@PathVariable int id, @ModelAttribute List<Building> deliveryList) {
+    public String processingAddDelivery(@PathVariable int id, @ModelAttribute("deliveryList") List<Building> deliveryList) {
         Building b = DimaUtils.findById(buildingList, id);
         Building newBuilding = new Building() {{
+            assert b != null;
             setId(b.getId());
-            setName(b.getName());
+            setTitle(b.getTitle());
             setIngredientList(DimaUtils.cloneList(order));
         }};
         deliveryList.add(newBuilding);
@@ -89,7 +90,7 @@ public class MainWarehouseController {
 
     @PostMapping("/delivery")
     @ResponseBody
-    public ResponseEntity sendDelivery(SessionStatus sessionStatus, @ModelAttribute List<Building> deliveryList) {
+    public List<Building> sendDelivery(SessionStatus sessionStatus, @ModelAttribute List<Building> deliveryList) {
         sessionStatus.setComplete();
         return mainWarehouseService.sendDelivery(deliveryList);
     }

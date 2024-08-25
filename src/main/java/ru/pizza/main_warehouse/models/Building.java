@@ -8,7 +8,7 @@ import java.util.List;
 @Data
 public class Building implements Cloneable{
     private int id;
-    private String name;
+    private String title;
     private List<Ingredient> ingredientList;
 
     @Override

@@ -1,7 +1,6 @@
 package ru.pizza.main_warehouse.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import ru.pizza.main_warehouse.models.Building;
@@ -10,13 +9,12 @@ import ru.pizza.main_warehouse.models.Ingredient.Status;
 import ru.pizza.main_warehouse.utils.DimaUtils;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class MainWarehouseService {
-
     private final RestTemplate restTemplate;
-    private static final String url1 = "http://localhost:8083/maker/ingredients";
-    private static final String url2 = "http://localhost:8085/dodo/buildings";
+
 
     @Autowired
     public MainWarehouseService(RestTemplate restTemplate) {
@@ -24,13 +22,17 @@ public class MainWarehouseService {
     }
 
     public List<Building> getBuildingsList() {
-        List<Building> buildings = getRestaurantsWarehouseList();
+        List<Building> buildings = getRestaurantsFromWarehouseList();
         addStatus(buildings);
         return buildings;
     }
 
+    public List<Building> sendDelivery(List<Building> buildings) {
+        return restTemplate.postForObject("http://localhost:8085/dodo/new-delivery", buildings, List.class);
+    }
+
     private void addStatus(List<Building> buildings) {
-        List<Ingredient> makerMenuList = ingredientsMakerMenuList();
+        List<Ingredient> makerMenuList = this.getIngredientsFromMakerMenuList();
         for (Building building : buildings) {
 
             List<Ingredient> makerMenuListCopy = DimaUtils.cloneList(makerMenuList);
@@ -60,19 +62,13 @@ public class MainWarehouseService {
 
     }
 
-    public ResponseEntity sendDelivery(List<Building> buildings) {
-        return restTemplate.postForEntity("http://localhost:8085/dodo/new-delivery", buildings, ResponseEntity.class);
+    private List<Building> getRestaurantsFromWarehouseList() {
+        String url2 = "http://localhost:8085/dodo/buildings";
+        return List.of(Objects.requireNonNull(restTemplate.getForEntity(url2, Building[].class).getBody()));
     }
 
-    private List<Building> getRestaurantsWarehouseList() {
-        List<Building> buildings = List.of(restTemplate.getForEntity(url2,
-                Building[].class).getBody());
-        return buildings;
-    }
-
-    private List<Ingredient> ingredientsMakerMenuList() {
-        Ingredient[] ingredients = restTemplate.getForEntity(url1,
-                Ingredient[].class).getBody();
-        return List.of(ingredients);
+    private List<Ingredient> getIngredientsFromMakerMenuList() {
+        String url1 = "http://localhost:8083/maker/ingredients";
+        return List.of(Objects.requireNonNull(restTemplate.getForEntity(url1, Ingredient[].class).getBody()));
     }
 }
