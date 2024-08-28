@@ -1,0 +1,8 @@
+services:
+  main-warehouse:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: pizza-project/main-warehouse:0.0.1-SNAPSHOT
+    ports:
+      - "8080:8080"
