@@ -1,7 +1,6 @@
 package ru.pizza.main_warehouse.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -9,7 +8,8 @@ import org.springframework.web.bind.support.SessionStatus;
 import ru.pizza.main_warehouse.models.Building;
 import ru.pizza.main_warehouse.models.Ingredient;
 import ru.pizza.main_warehouse.services.MainWarehouseService;
-import ru.pizza.main_warehouse.utils.DimaUtils;
+import ru.pizza.main_warehouse.services.rest.RestRestaurantService;
+import ru.pizza.main_warehouse.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,16 +17,11 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/warehouses")
-@SessionAttributes({"buildingList", "deliveryList", "order"})
+@RequiredArgsConstructor
+@SessionAttributes({"buildingList", "deliveryList", "orderIngredientList"})
 public class MainWarehouseController {
-    private List<Ingredient> order;
     private final MainWarehouseService mainWarehouseService;
-    private List<Building> buildingList;
-
-    @Autowired
-    public MainWarehouseController(MainWarehouseService mainWarehouseService) {
-        this.mainWarehouseService = mainWarehouseService;
-    }
+    private final RestRestaurantService restRestaurantService;
 
 
     @ModelAttribute("newIngredient")
@@ -34,9 +29,9 @@ public class MainWarehouseController {
         return new Ingredient();
     }
 
-    @ModelAttribute("order")
+    @ModelAttribute("orderIngredientList")
     public List<Ingredient> order() {
-        return this.order = new ArrayList<>();
+        return new ArrayList<>();
     }
 
     @ModelAttribute("deliveryList")
@@ -46,7 +41,7 @@ public class MainWarehouseController {
 
     @ModelAttribute("buildingList")
     public List<Building> buildingList() {
-        return buildingList = mainWarehouseService.getBuildingsList();
+       return mainWarehouseService.getBuildingsList();
     }
 
     @GetMapping
@@ -55,43 +50,52 @@ public class MainWarehouseController {
     }
 
     @GetMapping("/{id}")
-    public String getWarehouseId(@PathVariable int id, Model model) {
+    public String getWarehouseId(@PathVariable int id,
+                                 @ModelAttribute("buildingList") List<Building> buildingList,
+                                 Model model) {
         model.addAttribute("building",
-                DimaUtils.findById(buildingList, id));
+                Utils.findByIdObjectInList(buildingList, id));
         return "warehouse_form_id";
     }
 
     @PostMapping("/{id}/form-delivery")
-    public String processingUpdateIngredient(@PathVariable int id, Model model) {
-        Building building = DimaUtils.findById(buildingList, id);
+    public String processingUpdateIngredient(@PathVariable int id,
+                                             @ModelAttribute("buildingList") List<Building> buildingList,
+                                             Model model) {
+        Building building = Utils.findByIdObjectInList(buildingList, id);
         model.addAttribute("building", building);
         return "redirect:/warehouses/" + id;
     }
 
     @PostMapping("/order/{id}/add-delivery")
-    public String processingAddDelivery(@PathVariable int id, @ModelAttribute("deliveryList") List<Building> deliveryList) {
-        Building b = DimaUtils.findById(buildingList, id);
+    public String processingAddDelivery(@PathVariable int id,
+                                        @ModelAttribute("orderIngredientList") List<Ingredient> orderIngredientList,
+                                        @ModelAttribute("buildingList") List<Building> buildingList,
+                                        @ModelAttribute("deliveryList") List<Building> deliveryList) {
+        Building b = Utils.findByIdObjectInList(buildingList, id);
         Building newBuilding = new Building() {{
             assert b != null;
             setId(b.getId());
             setTitle(b.getTitle());
-            setIngredientList(DimaUtils.cloneList(order));
+            setIngredientList(Utils.cloneList(orderIngredientList));
         }};
         deliveryList.add(newBuilding);
-        order.clear();
+        orderIngredientList.clear();
         return index();
     }
 
     @PostMapping("/order/{id}/add")
-    public String processingAddIngredient(@PathVariable int id, @ModelAttribute Ingredient newIngredient) {
-        order.add(newIngredient);
+    public String processingAddIngredientToOrderIngredientList(@PathVariable int id,
+                                          @ModelAttribute("orderIngredientList") List<Ingredient> orderIngredientList,
+                                          @ModelAttribute("newIngredient") Ingredient newIngredient) {
+        orderIngredientList.add(newIngredient);
         return "redirect:/warehouses/" + id;
     }
 
     @PostMapping("/delivery")
     @ResponseBody
-    public List<Building> sendDelivery(SessionStatus sessionStatus, @ModelAttribute List<Building> deliveryList) {
+    public List<Building> sendDelivery(SessionStatus sessionStatus, @ModelAttribute("deliveryList") List<Building> deliveryList) {
         sessionStatus.setComplete();
-        return mainWarehouseService.sendDelivery(deliveryList);
+        return restRestaurantService.sendNewDeliveryList(deliveryList);
     }
 }

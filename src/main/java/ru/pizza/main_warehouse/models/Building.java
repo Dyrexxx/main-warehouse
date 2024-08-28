@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class Building implements Cloneable{
+public class Building implements Cloneable {
     private int id;
     private String title;
     private List<Ingredient> ingredientList;

@@ -6,11 +6,11 @@
 </head>
 <body>
 <div>
-    <h1 th:text="${building.name}"></h1>
+    <h1 th:text="${building.title}"></h1>
     <div th:each="i, j : ${building.getIngredientList()}">
         <form method="post" th:action="@{/warehouses/order/{id}/add(id=${building.id})}" th:object="${newIngredient}">
             <input type="hidden" th:value="${i.title}" name="title">
-            <input type="hidden" th:value="${i.getStatus()}" name="statusIngredient">
+            <input type="hidden" th:value="${i.isNew}" name="new">
             <label for="title" th:text="${i.getTitle()}"></label>
             <input type="text" id="title" th:field="*{weight}">
             <input type="submit" value="Добавить"/>
