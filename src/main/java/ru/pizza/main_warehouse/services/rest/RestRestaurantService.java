@@ -22,7 +22,6 @@ public class RestRestaurantService {
 
     public List<Building> sendNewDeliveryList(List<Building> newDeliveryList) {
         String url = "http://localhost:8085/dodo/new-delivery";
-        System.out.println(newDeliveryList);
         return restTemplate.postForObject(url, newDeliveryList, newDeliveryList.getClass());
     }
 
