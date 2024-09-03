@@ -14,7 +14,7 @@ public class RestMakerMenuService {
     private final RestTemplate restTemplate;
 
     public List<Ingredient> receiveMenuIngredients() {
-        String url = "http://localhost:8083/maker/ingredients";
+        String url = "http://MAKER-MENU/maker/ingredients";
         return List.of(Objects.requireNonNull(restTemplate.getForEntity(url, Ingredient[].class).getBody()));
     }
 }

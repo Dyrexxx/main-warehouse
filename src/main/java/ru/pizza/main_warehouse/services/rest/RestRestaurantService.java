@@ -1,6 +1,7 @@
 package ru.pizza.main_warehouse.services.rest;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -15,7 +16,7 @@ public class RestRestaurantService {
     private final RestTemplate restTemplate;
 
     public List<Building> receiveBuildingList() {
-        String url = "http://localhost:8085/dodo/buildings";
+        String url = "http://RESTAURANT/dodo/buildings";
         return List.of(Objects.requireNonNull(restTemplate.getForEntity(url, Building[].class).getBody()));
 
     }
