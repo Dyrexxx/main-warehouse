@@ -3,23 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <title>ДОДО ПИЦЦА</title>
-    <link rel="stylesheet" type="text/css" href="/styles.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 </head>
-<body>
-<div class="content">
-    <form method="get" th:action="@{/warehouses/{id}(id=${building.id})}"
-          th:each="building, j : ${buildingList}">
-
-        <h1 th:text="${building.getTitle()}"></h1>
-        <div th:each="ingredient : ${building.getIngredientList()}">
-            <p th:text="${ingredient.title} + ' - ' + ${ingredient.getStatus()}"></p>
+<body class="bg-light">
+<div class="container">
+    <div class="table-responsive">
+        <div th:each="building : ${buildingStatisticMap}">
+                <h1 th:text="${building.getKey().title}"></h1>
+                <div th:each="status : ${building.getValue()}">
+                    <table class="table table-striped caption-top">
+                        <caption th:text="${status.getValueName()}"/>
+                        <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Название</th>
+                            <th scope="col">Количество</th>
+                            <th scope="col">Добавить</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="ingredient, j : ${status.getIngredientForStatisticList()}">
+                            <th scope="row" th:text="${j.index+1}"/>
+                            <td th:text="${ingredient.title}"/>
+                            <td th:text="${ingredient.weight}"/>
+                            <form method="POST" th:action="@{/warehouses}" th:object="${deliveryEmptyDTO}">
+                                <input type="hidden" name="building.id" th:value="${building.getKey().id}">
+                                <input type="hidden" name="building.title" th:value="${building.getKey().title}">
+                                <input type="hidden" name="ingredient.title" th:value="${ingredient.title}">
+                                <input type="hidden" name="ingredient.new" th:value="${ingredient.new}">
+                                <td>
+                                    <input type="text" th:field="*{ingredient.weight}"/>
+                                    <input type="submit" value="Добавить"/>
+                                </td>
+                            </form>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            <hr>
+            <br><br>
         </div>
-        <input type="submit" value="Оформить заявку">
-    </form>
+    </div>
 </div>
-<br>
-    <form method="post" th:action="@{/warehouses/delivery}">
-        <input type="submit" value="Отправить в рестораны">
-    </form>
 </body>
 </html>
