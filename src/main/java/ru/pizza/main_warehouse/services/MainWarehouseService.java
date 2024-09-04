@@ -6,11 +6,12 @@ import org.springframework.web.client.RestTemplate;
 import ru.pizza.main_warehouse.domain.dto.request.from_maker_menu.IngredientFromMakerMenuDTO;
 import ru.pizza.main_warehouse.domain.dto.request.from_restaurant.BuildingFromRestaurantDTO;
 import ru.pizza.main_warehouse.domain.dto.request.from_restaurant.IngredientFromRestaurantDTO;
-import ru.pizza.main_warehouse.domain.dto.response.IngredientForStatisticDTO;
+import ru.pizza.main_warehouse.domain.dto.response.to_restaurant.IngredientForStatisticDTO;
 import ru.pizza.main_warehouse.domain.enums.Status;
-import ru.pizza.main_warehouse.domain.dto.response.BuildingKeyDTO;
+import ru.pizza.main_warehouse.domain.dto.response.to_restaurant.BuildingDTO;
 import ru.pizza.main_warehouse.mapper.BuildingMapper;
 import ru.pizza.main_warehouse.mapper.IngredientMapper;
+import ru.pizza.main_warehouse.domain.dto.response.to_restaurant.Delivery;
 
 import java.util.*;
 
@@ -21,15 +22,15 @@ public class MainWarehouseService {
     private final BuildingMapper buildingMapper;
     private final IngredientMapper ingredientMapper;
 
-    public Map<BuildingKeyDTO, Status[]> createBuildingStatisticMap() {
+    public Map<BuildingDTO, Status[]> createBuildingStatisticMap() {
         List<BuildingFromRestaurantDTO> buildingFromRestaurantDTOS = this.receiveBuildingList();
         List<IngredientFromMakerMenuDTO> makerMenuList = this.receiveMenuIngredients();
 
         return this.createBuildingStatisticMap(buildingFromRestaurantDTOS, makerMenuList);
     }
 
-    private void isNotLocatedOrAddToMap(Map<BuildingKeyDTO, Status[]> buildingStatisticMap,
-                                        BuildingKeyDTO building,
+    private void isNotLocatedOrAddToMap(Map<BuildingDTO, Status[]> buildingStatisticMap,
+                                        BuildingDTO building,
                                         IngredientFromMakerMenuDTO ingredientFromMakerMenuDTO,
                                         List<IngredientFromRestaurantDTO> ingredientFromRestaurantList) {
         boolean isLocated = false;
@@ -52,16 +53,16 @@ public class MainWarehouseService {
         }
     }
 
-    private Map<BuildingKeyDTO, Status[]> createBuildingStatisticMap(List<BuildingFromRestaurantDTO> buildingFromRestaurantDTOS,
-                                                                     List<IngredientFromMakerMenuDTO> makerMenuList) {
-        Map<BuildingKeyDTO, Status[]> buildingMap = new LinkedHashMap<>();
+    private Map<BuildingDTO, Status[]> createBuildingStatisticMap(List<BuildingFromRestaurantDTO> buildingFromRestaurantDTOS,
+                                                                  List<IngredientFromMakerMenuDTO> makerMenuList) {
+        Map<BuildingDTO, Status[]> buildingMap = new LinkedHashMap<>();
         for (BuildingFromRestaurantDTO buildingFromRestaurantDTO : buildingFromRestaurantDTOS) {
-            BuildingKeyDTO buildingKeyDTO = buildingMapper.toBuildingKeyModel(buildingFromRestaurantDTO);
-            buildingMap.put(buildingKeyDTO, Status.values());
+            BuildingDTO buildingDTO = buildingMapper.toBuildingKeyModel(buildingFromRestaurantDTO);
+            buildingMap.put(buildingDTO, Status.values());
             for (IngredientFromMakerMenuDTO ingredientFromRestaurantDTOMakerMenu : makerMenuList) {
                 this.isNotLocatedOrAddToMap(
                         buildingMap,
-                        buildingKeyDTO,
+                        buildingDTO,
                         ingredientFromRestaurantDTOMakerMenu,
                         buildingFromRestaurantDTO.getIngredientList());
             }
@@ -80,8 +81,8 @@ public class MainWarehouseService {
 
     }
 
-    public List<BuildingFromRestaurantDTO> sendNewDeliveryList(List<BuildingFromRestaurantDTO> newDeliveryList) {
-        String url = "http://localhost:8085/dodo/new-delivery";
-        return restTemplate.postForObject(url, newDeliveryList, newDeliveryList.getClass());
+    public void sendNewDeliveryList(Delivery delivery) {
+        String url = "http://RESTAURANT/restaurant/api/deliveries";
+        restTemplate.postForEntity(url, delivery, Delivery.class);
     }
 }
