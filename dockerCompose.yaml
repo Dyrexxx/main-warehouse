@@ -1,9 +1,0 @@
-services:
-  main-warehouse:
-    image: pizza-project/main-warehouse:0.0.1-SNAPSHOT
-    networks:
-      - dima
-    ports:
-      - "8080:8080"
-    depends_on:
-      - maker-menu
