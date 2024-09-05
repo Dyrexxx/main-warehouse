@@ -8,6 +8,9 @@ import ru.pizza.main_warehouse.domain.enums.Status;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Модель для заполнения данными из двух мкс (maker-menu, restaurant)
+ */
 @Data
 @NoArgsConstructor
 public class IngredientStatusModel {
