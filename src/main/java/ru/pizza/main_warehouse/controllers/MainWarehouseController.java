@@ -5,7 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.pizza.main_warehouse.domain.enums.Status;
-import ru.pizza.main_warehouse.domain.dto.response.to_restaurant.BuildingDTO;
+import ru.pizza.main_warehouse.domain.dto.response.to_restaurant.BuildingToRestaurantDTO;
 import ru.pizza.main_warehouse.services.MainWarehouseService;
 import ru.pizza.main_warehouse.domain.dto.response.to_restaurant.Delivery;
 import ru.pizza.main_warehouse.domain.models.thymeleaf.empty.DeliveryEmptyModel;
@@ -22,7 +22,7 @@ public class MainWarehouseController {
     private final MainWarehouseService mainWarehouseService;
 
     @ModelAttribute("buildingStatisticMap")
-    public Map<BuildingDTO, Status[]> buildingStatisticMap() {
+    public Map<BuildingToRestaurantDTO, Status[]> buildingStatisticMap() {
         return mainWarehouseService.createBuildingStatisticMap();
     }
 

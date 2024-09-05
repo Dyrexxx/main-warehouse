@@ -43,10 +43,10 @@ public class Delivery {
     @ToString
     @NoArgsConstructor
     public static class ItemDelivery {
-        private BuildingDTO building;
+        private BuildingToRestaurantDTO building;
         private List<IngredientForStatisticDTO> ingredientList = new ArrayList<>();
 
-        public ItemDelivery(BuildingDTO buildingKey) {
+        public ItemDelivery(BuildingToRestaurantDTO buildingKey) {
             this.building = buildingKey;
         }
 

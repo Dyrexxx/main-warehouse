@@ -1,10 +1,15 @@
 package ru.pizza.main_warehouse.domain.dto.response.to_restaurant;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Objects;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class IngredientForStatisticDTO {
     private String title;
     private int weight;

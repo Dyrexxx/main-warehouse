@@ -8,7 +8,7 @@ import ru.pizza.main_warehouse.domain.dto.request.from_restaurant.BuildingFromRe
 import ru.pizza.main_warehouse.domain.dto.request.from_restaurant.IngredientFromRestaurantDTO;
 import ru.pizza.main_warehouse.domain.dto.response.to_restaurant.IngredientForStatisticDTO;
 import ru.pizza.main_warehouse.domain.enums.Status;
-import ru.pizza.main_warehouse.domain.dto.response.to_restaurant.BuildingDTO;
+import ru.pizza.main_warehouse.domain.dto.response.to_restaurant.BuildingToRestaurantDTO;
 import ru.pizza.main_warehouse.mapper.BuildingMapper;
 import ru.pizza.main_warehouse.mapper.IngredientMapper;
 import ru.pizza.main_warehouse.domain.dto.response.to_restaurant.Delivery;
@@ -22,15 +22,15 @@ public class MainWarehouseService {
     private final BuildingMapper buildingMapper;
     private final IngredientMapper ingredientMapper;
 
-    public Map<BuildingDTO, Status[]> createBuildingStatisticMap() {
+    public Map<BuildingToRestaurantDTO, Status[]> createBuildingStatisticMap() {
         List<BuildingFromRestaurantDTO> buildingFromRestaurantDTOS = this.receiveBuildingList();
         List<IngredientFromMakerMenuDTO> makerMenuList = this.receiveMenuIngredients();
 
         return this.createBuildingStatisticMap(buildingFromRestaurantDTOS, makerMenuList);
     }
 
-    private void isNotLocatedOrAddToMap(Map<BuildingDTO, Status[]> buildingStatisticMap,
-                                        BuildingDTO building,
+    private void isNotLocatedOrAddToMap(Map<BuildingToRestaurantDTO, Status[]> buildingStatisticMap,
+                                        BuildingToRestaurantDTO building,
                                         IngredientFromMakerMenuDTO ingredientFromMakerMenuDTO,
                                         List<IngredientFromRestaurantDTO> ingredientFromRestaurantList) {
         boolean isLocated = false;
@@ -53,11 +53,11 @@ public class MainWarehouseService {
         }
     }
 
-    private Map<BuildingDTO, Status[]> createBuildingStatisticMap(List<BuildingFromRestaurantDTO> buildingFromRestaurantDTOS,
-                                                                  List<IngredientFromMakerMenuDTO> makerMenuList) {
-        Map<BuildingDTO, Status[]> buildingMap = new LinkedHashMap<>();
+    private Map<BuildingToRestaurantDTO, Status[]> createBuildingStatisticMap(List<BuildingFromRestaurantDTO> buildingFromRestaurantDTOS,
+                                                                              List<IngredientFromMakerMenuDTO> makerMenuList) {
+        Map<BuildingToRestaurantDTO, Status[]> buildingMap = new LinkedHashMap<>();
         for (BuildingFromRestaurantDTO buildingFromRestaurantDTO : buildingFromRestaurantDTOS) {
-            BuildingDTO buildingDTO = buildingMapper.toBuildingKeyModel(buildingFromRestaurantDTO);
+            BuildingToRestaurantDTO buildingDTO = buildingMapper.toBuildingKeyModel(buildingFromRestaurantDTO);
             buildingMap.put(buildingDTO, Status.values());
             for (IngredientFromMakerMenuDTO ingredientFromRestaurantDTOMakerMenu : makerMenuList) {
                 this.isNotLocatedOrAddToMap(
