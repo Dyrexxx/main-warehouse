@@ -1,22 +1,26 @@
 package ru.pizza.main_warehouse.domain.enums;
 
 import lombok.Getter;
+import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 import ru.pizza.main_warehouse.domain.dto.response.to_restaurant.IngredientForStatisticDTO;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
+@ToString
 public enum Status {
-    SHORTAGE("Недостаток", new ArrayList<>()),
-    ACCEPTABLE("Приемлимо", new ArrayList<>()),
-    NOT_FOUND("Нет в наличии", new ArrayList<>());
+    SHORTAGE("Недостаток"),
+    ACCEPTABLE("Приемлимо"),
+    NOT_FOUND("Нет в наличии");
 
     private final String valueName;
-    private final List<IngredientForStatisticDTO> ingredientForStatisticList;
 
-    Status(String valueName, List<IngredientForStatisticDTO> ingredientForStatisticDTOS) {
+    Status(String valueName) {
         this.valueName = valueName;
-        this.ingredientForStatisticList = ingredientForStatisticDTOS;
     }
+
+
+
 }

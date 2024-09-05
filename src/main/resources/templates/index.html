@@ -11,9 +11,9 @@
     <div class="table-responsive">
         <div th:each="building : ${buildingStatisticMap}">
                 <h1 th:text="${building.getKey().title}"></h1>
-                <div th:each="status : ${building.getValue()}">
+                <div th:each="statusModel : ${building.getValue()}">
                     <table class="table table-striped caption-top">
-                        <caption th:text="${status.getValueName()}"/>
+                        <caption th:text="${statusModel.status.getValueName()}"/>
                         <thead>
                         <tr>
                             <th scope="col">#</th>
@@ -23,7 +23,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="ingredient, j : ${status.getIngredientForStatisticList()}">
+                        <tr th:each="ingredient, j : ${statusModel.getIngredientList()}">
                             <th scope="row" th:text="${j.index+1}"/>
                             <td th:text="${ingredient.title}"/>
                             <td th:text="${ingredient.weight}"/>

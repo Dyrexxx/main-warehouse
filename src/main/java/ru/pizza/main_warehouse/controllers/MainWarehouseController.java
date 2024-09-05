@@ -6,10 +6,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.pizza.main_warehouse.domain.enums.Status;
 import ru.pizza.main_warehouse.domain.dto.response.to_restaurant.BuildingToRestaurantDTO;
+import ru.pizza.main_warehouse.domain.models.IngredientStatusModel;
 import ru.pizza.main_warehouse.services.MainWarehouseService;
 import ru.pizza.main_warehouse.domain.dto.response.to_restaurant.Delivery;
 import ru.pizza.main_warehouse.domain.models.thymeleaf.empty.DeliveryEmptyModel;
 
+import java.util.List;
 import java.util.Map;
 
 
@@ -22,7 +24,7 @@ public class MainWarehouseController {
     private final MainWarehouseService mainWarehouseService;
 
     @ModelAttribute("buildingStatisticMap")
-    public Map<BuildingToRestaurantDTO, Status[]> buildingStatisticMap() {
+    public Map<BuildingToRestaurantDTO, List<IngredientStatusModel>> buildingStatisticMap() {
         return mainWarehouseService.createBuildingStatisticMap();
     }
 

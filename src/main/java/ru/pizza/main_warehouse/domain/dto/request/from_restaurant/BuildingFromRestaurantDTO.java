@@ -5,6 +5,9 @@ import lombok.*;
 import java.util.List;
 import java.util.Objects;
 
+/***
+ * dto для получение данных из мкс restaurant
+ */
 @Getter
 @Setter
 @ToString

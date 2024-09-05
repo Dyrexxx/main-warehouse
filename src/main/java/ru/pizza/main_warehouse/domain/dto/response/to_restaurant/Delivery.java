@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * dto для формирования доставки в мкс restaurant
+ */
 @Getter
 @Setter
 @ToString
