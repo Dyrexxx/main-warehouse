@@ -23,6 +23,10 @@ public class Delivery {
         this.delivery = new ArrayList<>();
     }
 
+    /***
+     * Добавляет ингредиент в корзину доставки к определенному ресторану
+     * @param deliveryEmptyModel Модель в которой находится информация в какой ресторан доставить и какой ингредиент доставить
+     */
     public void addItem(DeliveryEmptyModel deliveryEmptyModel) {
         ItemDelivery newItemModel = new ItemDelivery(deliveryEmptyModel.getBuilding());
         if (!delivery.contains(newItemModel)) {
