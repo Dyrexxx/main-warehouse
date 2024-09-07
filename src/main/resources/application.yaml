@@ -12,6 +12,7 @@ spring:
         enabled: true
 eureka:
   instance:
+    hostname: localhost
     prefer-ip-address: true
   client:
     service-url:
@@ -23,14 +24,9 @@ spring:
   config:
     activate:
       on-profile: dev
-eureka:
-  instance:
-    hostname: localhost
+
 ---
 spring:
   config:
     activate:
       on-profile: prod
-eureka:
-  instance:
-    hostname: eureka
