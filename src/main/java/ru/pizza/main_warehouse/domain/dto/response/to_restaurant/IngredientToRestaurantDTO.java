@@ -3,14 +3,13 @@ package ru.pizza.main_warehouse.domain.dto.response.to_restaurant;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Objects;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class IngredientForStatisticDTO {
+public class IngredientToRestaurantDTO {
     private String title;
     private int weight;
     private boolean isNew;
@@ -18,7 +17,7 @@ public class IngredientForStatisticDTO {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof IngredientForStatisticDTO that)) return false;
+        if (!(o instanceof IngredientToRestaurantDTO that)) return false;
         return Objects.equals(title, that.title);
     }
 

@@ -27,7 +27,7 @@
                             <th scope="row" th:text="${j.index+1}"/>
                             <td th:text="${ingredient.title}"/>
                             <td th:text="${ingredient.weight}"/>
-                            <form method="POST" th:action="@{/warehouses}" th:object="${deliveryEmptyDTO}">
+                            <form method="POST" th:action="@{/warehouses}" th:object="${deliveryFormDTO}">
                                 <input type="hidden" name="building.id" th:value="${building.getKey().id}">
                                 <input type="hidden" name="building.title" th:value="${building.getKey().title}">
                                 <input type="hidden" name="ingredient.title" th:value="${ingredient.title}">

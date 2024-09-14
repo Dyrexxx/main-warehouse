@@ -4,12 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.pizza.main_warehouse.domain.enums.Status;
+import ru.pizza.main_warehouse.domain.dto.response.thymeleaf.empty.DeliveryFormDTO;
+import ru.pizza.main_warehouse.domain.dto.response.to_restaurant.DeliveryDTO;
 import ru.pizza.main_warehouse.domain.dto.response.to_restaurant.BuildingToRestaurantDTO;
-import ru.pizza.main_warehouse.domain.models.IngredientStatusModel;
+import ru.pizza.main_warehouse.domain.dto.response.statistic.IngredientStatusDTO;
+import ru.pizza.main_warehouse.domain.models.to_restaurant.DeliveryModel;
 import ru.pizza.main_warehouse.services.MainWarehouseService;
-import ru.pizza.main_warehouse.domain.dto.response.to_restaurant.Delivery;
-import ru.pizza.main_warehouse.domain.models.thymeleaf.empty.DeliveryEmptyModel;
 
 import java.util.List;
 import java.util.Map;
@@ -17,31 +17,31 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/warehouses")
-@SessionAttributes({"buildingStatisticMap", "delivery"})
+@SessionAttributes({"buildingStatisticMap", "deliverySendListDTO"})
 @RequiredArgsConstructor
 public class MainWarehouseController {
-    private Delivery delivery;
     private final MainWarehouseService mainWarehouseService;
+    private final DeliveryModel deliveryModel = new DeliveryModel();
 
     @ModelAttribute("buildingStatisticMap")
-    public Map<BuildingToRestaurantDTO, List<IngredientStatusModel>> buildingStatisticMap() {
-        return mainWarehouseService.createBuildingStatisticMap();
+    public Map<BuildingToRestaurantDTO, List<IngredientStatusDTO>> buildingStatisticMap() {
+        return mainWarehouseService.createBuildingStatisticMap(
+                mainWarehouseService.receiveBuildingList(), mainWarehouseService.receiveMenuIngredients());
     }
-
-    @ModelAttribute("delivery")
-    public Delivery deliveryList() {
-        return delivery = new Delivery();
+    @ModelAttribute("deliverySendListDTO")
+    public List<DeliveryDTO> deliverySendListDTO() {
+        return deliveryModel.getDeliveryList();
     }
 
     @GetMapping
     public String index(Model model) {
-        model.addAttribute("deliveryEmptyDTO", new DeliveryEmptyModel());
+        model.addAttribute("deliveryFormDTO", new DeliveryFormDTO());
         return "index";
     }
 
     @PostMapping
-    public String add(@ModelAttribute DeliveryEmptyModel deliveryEmptyModel) {
-        delivery.addItem(deliveryEmptyModel);
+    public String add(@ModelAttribute DeliveryFormDTO deliveryFormDTO) {
+        deliveryModel.add(deliveryFormDTO);
         return "redirect:/warehouses";
     }
 }

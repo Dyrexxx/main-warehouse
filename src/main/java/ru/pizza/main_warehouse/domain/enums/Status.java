@@ -2,11 +2,6 @@ package ru.pizza.main_warehouse.domain.enums;
 
 import lombok.Getter;
 import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
-import ru.pizza.main_warehouse.domain.dto.response.to_restaurant.IngredientForStatisticDTO;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @ToString

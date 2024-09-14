@@ -11,8 +11,8 @@
 </form>
 <div class="container">
     <div class="table-responsive">
-        <div th:each="building : ${delivery.getDelivery()}">
-            <h1 th:text="${building.getBuilding().title}"/>
+        <div th:each="delivery : ${deliverySendListDTO}">
+            <h1 th:text="${delivery.getBuilding().title}"/>
             <table class="table table-striped">
                 <thead>
                 <tr>
@@ -23,7 +23,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="ingredient, j : ${building.getIngredientList()}">
+                <tr th:each="ingredient, j : ${delivery.getIngredientList()}">
                     <th scope="row" th:text="${j.index+1}"/>
                     <td th:text="${ingredient.title}"/>
                     <td th:text="${ingredient.weight}"/>

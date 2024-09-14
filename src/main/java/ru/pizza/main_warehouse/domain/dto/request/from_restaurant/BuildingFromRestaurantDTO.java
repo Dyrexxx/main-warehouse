@@ -11,6 +11,7 @@ import java.util.Objects;
 @Getter
 @Setter
 @ToString
+@AllArgsConstructor
 @NoArgsConstructor
 public class BuildingFromRestaurantDTO {
     private int id;
