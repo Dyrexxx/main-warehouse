@@ -10,37 +10,37 @@
 <div class="container">
     <div class="table-responsive">
         <div th:each="building : ${buildingStatisticMap}">
-                <h1 th:text="${building.getKey().title}"></h1>
-                <div th:each="statusModel : ${building.getValue()}">
-                    <table class="table table-striped caption-top">
-                        <caption th:text="${statusModel.status.getValueName()}"/>
-                        <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Название</th>
-                            <th scope="col">Количество</th>
-                            <th scope="col">Добавить</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr th:each="ingredient, j : ${statusModel.getIngredientList()}">
-                            <th scope="row" th:text="${j.index+1}"/>
-                            <td th:text="${ingredient.title}"/>
-                            <td th:text="${ingredient.weight}"/>
-                            <form method="POST" th:action="@{/warehouses}" th:object="${deliveryFormDTO}">
-                                <input type="hidden" name="building.id" th:value="${building.getKey().id}">
-                                <input type="hidden" name="building.title" th:value="${building.getKey().title}">
-                                <input type="hidden" name="ingredient.title" th:value="${ingredient.title}">
-                                <input type="hidden" name="ingredient.new" th:value="${ingredient.new}">
-                                <td>
-                                    <input type="text" th:field="*{ingredient.weight}"/>
-                                    <input type="submit" value="Добавить"/>
-                                </td>
-                            </form>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
+            <h1 th:text="${building.getKey().title}"></h1>
+            <div th:each="statusModel : ${building.getValue()}">
+                <table class="table table-striped caption-top">
+                    <caption th:text="${statusModel.status.getValueName()}"/>
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Название</th>
+                        <th scope="col">Количество</th>
+                        <th scope="col">Добавить</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="ingredient, j : ${statusModel.getIngredientList()}">
+                        <th scope="row" th:text="${j.index+1}"/>
+                        <td th:text="${ingredient.title}"/>
+                        <td th:text="${ingredient.weight}"/>
+                        <form method="POST" th:action="@{/warehouses}" th:object="${deliveryFormDTO}">
+                            <input type="hidden" name="building.id" th:value="${building.getKey().id}">
+                            <input type="hidden" name="building.title" th:value="${building.getKey().title}">
+                            <input type="hidden" name="ingredient.title" th:value="${ingredient.title}">
+                            <input type="hidden" name="ingredient.new" th:value="${ingredient.new}">
+                            <td>
+                                <input type="text" th:field="*{ingredient.weight}"/>
+                                <input type="submit" value="Добавить"/>
+                            </td>
+                        </form>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
             <hr>
             <br><br>
         </div>

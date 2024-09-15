@@ -90,12 +90,21 @@ public class MainWarehouseService {
             buildingStatisticMap.get(building).get(2).getIngredientList().add(newIngredient);
         }
     }
+
     /**
      * @return Получает данные из мкс (maker-menu)
      */
     public List<IngredientFromMakerMenuDTO> receiveMenuIngredients() {
         String url = "http://MAKER-MENU/maker/ingredients";
-        return List.of(Objects.requireNonNull(restTemplate.getForEntity(url, IngredientFromMakerMenuDTO[].class).getBody()));
+        try {
+            IngredientFromMakerMenuDTO[] ingredientArray = restTemplate.getForEntity(url, IngredientFromMakerMenuDTO[].class).getBody();
+            if (ingredientArray == null || ingredientArray.length == 0) {
+                throw new NullPointerException("Список всех ингредиентов пуст или не существует");
+            }
+            return List.of(ingredientArray);
+        } catch (RuntimeException exception) {
+            throw new RuntimeException("Нет подключения к Maker-menu");
+        }
     }
 
     /**
@@ -103,8 +112,15 @@ public class MainWarehouseService {
      */
     public List<BuildingFromRestaurantDTO> receiveBuildingList() {
         String url = "http://RESTAURANT/restaurant/api/buildings";
-        return List.of(Objects.requireNonNull(restTemplate.getForEntity(url, BuildingFromRestaurantDTO[].class).getBody()));
-
+        try {
+            BuildingFromRestaurantDTO[] buildingArray = restTemplate.getForEntity(url, BuildingFromRestaurantDTO[].class).getBody();
+            if (buildingArray == null || buildingArray.length == 0) {
+                throw new NullPointerException("Список ресторанов пуст или не существует");
+            }
+            return List.of(buildingArray);
+        } catch (RuntimeException ex) {
+            throw new RuntimeException("Нет подключения к Restaurant");
+        }
     }
 
     /**

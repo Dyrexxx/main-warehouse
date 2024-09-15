@@ -21,13 +21,13 @@ public class SendToRestaurantController {
     @GetMapping
     public String index(@ModelAttribute("deliverySendListDTO") List<DeliveryDTO> deliveryDTO, Model model) {
         model.addAttribute("deliverySendListDTO", deliveryDTO);
-        System.out.println(deliveryDTO);
         return "send";
     }
 
     @PostMapping
     public String sendToRestaurant(SessionStatus sessionStatus, @ModelAttribute("deliverySendListDTO") List<DeliveryDTO> deliveryDTO) {
         mainWarehouseService.sendNewDeliveryList(deliveryDTO);
+        deliveryDTO.clear();
         sessionStatus.setComplete();
         return "redirect:/warehouses";
     }
