@@ -2,7 +2,6 @@ package ru.pizza.main_warehouse.integrations_test;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.powermock.api.mockito.PowerMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -18,7 +17,6 @@ import ru.pizza.main_warehouse.services.MainWarehouseService;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.spy;
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
